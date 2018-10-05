@@ -1,5 +1,6 @@
 ﻿using FC.Data.Repositories.Interfaces;
 using FC.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,26 @@ namespace FC.Data.Repositories
             folder.Title = model.Title;
             DbContext.Folders.Add(folder);
             await DbContext.SaveChangesAsync();
+        }
+        public async Task<List<FolderModel>> GetAllFolders()
+        {
+            var folders = await (from o in DbContext.Folders
+                                select new FolderModel
+                                {
+                                    Id = o.Id,
+                                    Title = o.Title,
+                                }).ToListAsync();
+            return folders;
+        }
+        public async Task AddQuestions(List<QuestionModel> model)
+        {
+            foreach (var item in model)
+            {
+                var question = new Question();
+                question.Text = item.Text;
+                await DbContext.Questions.AddAsync(question);
+                await DbContext.SaveChangesAsync();
+            }
         }
     }
 }
