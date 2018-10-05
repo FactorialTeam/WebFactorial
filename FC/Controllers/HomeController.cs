@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using FC.Models;
+using FC.CognitiveSevices;
+using System.Collections.Generic;
 
 namespace FC.Controllers
 {
@@ -12,6 +10,26 @@ namespace FC.Controllers
     {
         public IActionResult Index()
         {
+            try
+            {
+                var lst = new List<string>() {
+
+                    "Snakes can help predict future",
+                    "The Apple App Store launched in July 2008",
+                    "Snakes can help predict earthquakes",
+                    "The world’s oldest piece of chewing gum is over 9,000 years old",
+                    "Earth has traveled more than 5,000 miles in the past 5 minutes",
+                    "Mountain lions can whistle"
+                };
+
+                //
+                var result = CongnitiveServices.IdentifyEntities(lst);
+
+            }
+            catch (System.Exception ex)
+            {
+                return Json(new { message = ex.Message });
+            }
             return View();
         }
 
