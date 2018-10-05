@@ -11,4 +11,12 @@ namespace FC.Models
         public string TextContent { get; set; }
         public bool Status { get; set; }
     }
+    public class TextViewModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public int? FolderId { get; set; }
+        public bool Status { get; set; }
+        public List<QuestionModel> Questions { get; set; }
+    }
 }

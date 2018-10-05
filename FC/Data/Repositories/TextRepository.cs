@@ -1,7 +1,6 @@
 ﻿using FC.Data.Repositories.Interfaces;
 using FC.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,12 +30,29 @@ namespace FC.Data.Repositories
         public async Task<List<FolderModel>> GetAllFolders()
         {
             var folders = await (from o in DbContext.Folders
-                                select new FolderModel
-                                {
-                                    Id = o.Id,
-                                    Title = o.Title,
-                                }).ToListAsync();
+                                 select new FolderModel
+                                 {
+                                     Id = o.Id,
+                                     Title = o.Title,
+                                 }).ToListAsync();
             return folders;
+        }
+        public async Task<List<TextViewModel>> GetTextBy(int folderID)
+        {
+            var lst = await (from t in DbContext.Texts
+                             where t.FolderId == folderID
+                             select new TextViewModel
+                             {
+                                 Id = t.Id,
+                                 Title = t.TextContent,
+                                 FolderId=t.FolderId,
+                                 Questions = t.TextQuestions.Select(q => new QuestionModel
+                                 {
+                                     Id = q.QuestionId,
+                                     Text = q.Question.Text
+                                 }).ToList()
+                             }).ToListAsync();
+            return lst;
         }
         public async Task AddQuestions(List<QuestionModel> model)
         {

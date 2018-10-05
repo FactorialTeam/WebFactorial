@@ -60,6 +60,14 @@ namespace FC.Controllers
             var folders = await UnitOfWork.TextRepository.GetAllFolders();
             return Json(new { success = true, result = folders });
         }
+
+        [HttpPost("getbyfolder")]
+        public async Task<IActionResult> GetByFolder([FromBody]FileModel folder)
+        {
+            var lst = await UnitOfWork.TextRepository.GetTextBy(folder.FolderId);
+            return Json(new { success = true, result = lst });
+        }
+
         [HttpPost("addquestions")]
         public async Task<object> AddQuestions([FromBody] List<QuestionModel> model)
         {

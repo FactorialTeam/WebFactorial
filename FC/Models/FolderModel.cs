@@ -11,4 +11,8 @@ namespace FC.Models
         public string Title { get; set; }
 
     }
+    public class FileModel
+    {
+        public int FolderId { get; set; }
+    }
 }
