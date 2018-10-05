@@ -23,7 +23,8 @@ namespace FC.Controllers
                 };
 
                 //
-                var result = CongnitiveServices.IdentifyEntities(lst);
+                var entities = CongnitiveServices.IdentifyEntities(lst);
+                var keyPhrases = CongnitiveServices.IdentifyKeyPhrases(lst);
 
             }
             catch (System.Exception ex)

@@ -3,6 +3,7 @@ using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
 using Microsoft.Rest;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -118,69 +119,59 @@ namespace FC.CognitiveSevices
 
             Console.ReadLine();
         }
-        public static void IdentifyKeyPhrases()
+
+        public static Dictionary<string,List<KeyValuePair<string, string>>> IdentifyKeyPhrases(List<string> lstSentence)
         {
+            var response = new Dictionary<string,List<KeyValuePair<string, string>>>();
             // Create a client.
             ITextAnalyticsClient client = new TextAnalyticsClient(new ApiKeyServiceClientCredentials())
             {
                 Endpoint = "https://westus.api.cognitive.microsoft.com"
             }; //Replace 'westus' with the correct region for your Text Analytics subscription
 
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            var inputList = lstSentence.Select((l, i) => new MultiLanguageInput("en", i.ToString(), l)).ToList();
 
-            KeyPhraseBatchResult result2 = client.KeyPhrasesAsync(new MultiLanguageBatchInput(
-                        new List<MultiLanguageInput>()
-                        {
-                          new MultiLanguageInput("ja", "1", "猫は幸せ"),
-                          new MultiLanguageInput("de", "2", "Fahrt nach Stuttgart und dann zum Hotel zu Fu."),
-                          new MultiLanguageInput("en", "3", "My cat is stiff as a rock."),
-                          new MultiLanguageInput("es", "4", "A mi me encanta el fútbol!")
-                        })).Result;
+            KeyPhraseBatchResult result = client.KeyPhrasesAsync(new MultiLanguageBatchInput(inputList)).Result;
 
-            // Printing keyphrases
-            foreach (var document in result2.Documents)
+            // Printing entities results
+            foreach (var document in result.Documents)
             {
-                Console.WriteLine("Document ID: {0} ", document.Id);
-
-                Console.WriteLine("\t Key phrases:");
-
+                var entities = new List<KeyValuePair<string, string>>();
                 foreach (string keyphrase in document.KeyPhrases)
                 {
-                    Console.WriteLine("\t\t" + keyphrase);
+                    entities.Add(new KeyValuePair<string, string>(document.Id, keyphrase));
                 }
+                response.Add(document.Id, entities);
             }
+            return response;
         }
-        public static Dictionary<string, List<KeyValuePair<string, string>>> IdentifyEntities(List<string> lstSentence)
+
+        public static Dictionary<string,List<KeyValuePair<string, string>>> IdentifyEntities(List<string> lstSentence)
         {
-            var response = new Dictionary<string, List<KeyValuePair<string, string>>>();
+            var response = new Dictionary<string,List<KeyValuePair<string, string>>>();
             // Create a client.
             ITextAnalyticsClient client = new TextAnalyticsClient(new ApiKeyServiceClientCredentials())
             {
                 Endpoint = "https://westus.api.cognitive.microsoft.com"
-            }; //Replace 'westus' with the correct region for your Text Analytics subscription
+            };
 
-            foreach (var stc in lstSentence)
+            //Replace 'westus' with the correct region for your Text Analytics subscription
+
+            var inputList = lstSentence.Select((l,i) => new MultiLanguageInput("en", i.ToString(), l)).ToList();
+
+            EntitiesBatchResult result = client.EntitiesAsync(new MultiLanguageBatchInput(inputList)).Result;
+
+            // Printing entities results
+            foreach (var document in result.Documents)
             {
-                EntitiesBatchResult result = client.EntitiesAsync(
-                        new MultiLanguageBatchInput(
-                            new List<MultiLanguageInput>()
-                            {
-                          new MultiLanguageInput("en", "0", stc)
-                            })).Result;
-
-                // Printing entities results
-                foreach (var document in result.Documents)
+                var entities = new List<KeyValuePair<string, string>>();
+                foreach (EntityRecord entity in document.Entities)
                 {
-                    var entities = new List<KeyValuePair<string, string>>();
-
-                    foreach (EntityRecord entity in document.Entities)
-                    {
-                        entities.Add(new KeyValuePair<string, string>(document.Id, entity.Name));
-                    }
-                    //
-                    response.Add(stc, entities);
+                    entities.Add(new KeyValuePair<string, string>(document.Id, entity.Name));
                 }
+                response.Add(document.Id, entities);
             }
+
             return response;
         }
     }
