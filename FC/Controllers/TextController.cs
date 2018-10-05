@@ -26,7 +26,9 @@ namespace FC.Controllers
                 if (ModelState.IsValid)
                 {
                     await UnitOfWork.TextRepository.AddText(model);
-                    return Json(new { success = true });
+                    List<QuestionModel> questions = new List<QuestionModel>();
+                    
+                    return Json(new { success = true, result= questions });
                 }
                 return Json(new { success = false, error = "Model have required fields" });
             }
