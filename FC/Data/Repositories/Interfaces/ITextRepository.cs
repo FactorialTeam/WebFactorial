@@ -10,5 +10,7 @@ namespace FC.Data.Repositories.Interfaces
     {
         Task AddText(TextModel model);
         Task AddFolder(FolderModel model);
+        Task<List<FolderModel>> GetAllFolders();
+        Task AddQuestions(List<QuestionModel> model);
     }
 }

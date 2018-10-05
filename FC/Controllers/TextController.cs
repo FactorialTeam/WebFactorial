@@ -54,5 +54,29 @@ namespace FC.Controllers
             }
 
         }
+        [HttpGet("getall")]
+        public async Task<IActionResult> GetAllFolders()
+        {
+            var folders = await UnitOfWork.TextRepository.GetAllFolders();
+            return Json(new { success = true, result = folders });
+        }
+        [HttpPost("addquestions")]
+        public async Task<object> AddQuestions([FromBody] List<QuestionModel> model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    await UnitOfWork.TextRepository.AddQuestions(model);
+                    return Json(new { success = true });
+                }
+                return Json(new { success = false, error = "Model have required fields" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+
+        }
     }
 }
