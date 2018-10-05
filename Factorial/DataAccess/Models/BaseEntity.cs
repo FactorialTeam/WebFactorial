@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DataAccess
+namespace Factorial.DataAccess
 {
     public class BaseEntity : IBaseEntity
     {

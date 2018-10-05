@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace DataAccess
+namespace Factorial.DataAccess
 {
-    public class User : IdentityUser<int>, IBaseEntity
+    public class User : IdentityUser<int>
     {
         [Required]
         public string FirstName { get; set; }
