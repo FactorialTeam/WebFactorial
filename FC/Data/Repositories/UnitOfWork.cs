@@ -1,4 +1,6 @@
 ﻿using FC.Data;
+using FC.Data.Repositories;
+using FC.Data.Repositories.Interfaces;
 using FC.DataAccess.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,9 @@ namespace FC.DataAccess.Repositories
         {
             return await DbContext.SaveChangesAsync();
         }
+        ITextRepository _TextRepository;
+        public ITextRepository TextRepository => _TextRepository ?? (_TextRepository = new TextRepository(DbContext));
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)

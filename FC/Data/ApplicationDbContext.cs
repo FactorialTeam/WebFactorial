@@ -29,5 +29,9 @@ namespace FC.Data
             builder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
         }
         public DbSet<Text> Texts { get; set; }
+        public DbSet<Folder> Folders { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<TextQuestion> TextQuestions { get; set; }
+
     }
 }

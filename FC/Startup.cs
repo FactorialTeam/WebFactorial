@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using FC.Data;
 using FC.Models;
 using FC.Services;
+using FC.DataAccess.Repositories.Interfaces;
+using FC.DataAccess.Repositories;
 
 namespace FC
 {
@@ -35,6 +37,7 @@ namespace FC
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddMvc();
         }

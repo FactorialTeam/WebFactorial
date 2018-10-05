@@ -11,9 +11,10 @@ using System;
 namespace FC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181005135037_folder")]
+    partial class folder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,19 +32,6 @@ namespace FC.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Folders");
-                });
-
-            modelBuilder.Entity("FC.Data.Question", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Text")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("FC.Data.Role", b =>
@@ -83,26 +71,6 @@ namespace FC.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Texts");
-                });
-
-            modelBuilder.Entity("FC.Data.TextQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("QuestionId");
-
-                    b.Property<bool>("Status");
-
-                    b.Property<int>("TextId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("TextId");
-
-                    b.ToTable("TextQuestions");
                 });
 
             modelBuilder.Entity("FC.Models.ApplicationUser", b =>
@@ -247,19 +215,6 @@ namespace FC.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UserTokens");
-                });
-
-            modelBuilder.Entity("FC.Data.TextQuestion", b =>
-                {
-                    b.HasOne("FC.Data.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("FC.Data.Text", "Text")
-                        .WithMany()
-                        .HasForeignKey("TextId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
