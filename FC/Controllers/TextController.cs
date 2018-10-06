@@ -26,9 +26,12 @@ namespace FC.Controllers
                 if (ModelState.IsValid)
                 {
                     await UnitOfWork.TextRepository.AddText(model);
-                    List<QuestionModel> questions = new List<QuestionModel>();
+
+                    var result = new TextViewModel();
+
+                    result.Questions = await UnitOfWork.TextRepository.GetQuestions(1);
                     
-                    return Json(new { success = true, result= questions });
+                    return Json(new { success = true, result= result });
                 }
                 return Json(new { success = false, error = "Model have required fields" });
             }
@@ -71,13 +74,13 @@ namespace FC.Controllers
         }
 
         [HttpPost("addquestions")]
-        public async Task<object> AddQuestions([FromBody] List<QuestionModel> model)
+        public async Task<object> AddQuestions([FromBody] SaveQuestionModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await UnitOfWork.TextRepository.AddQuestions(model);
+                    await UnitOfWork.TextRepository.AddQuestions(model.Questions);
                     return Json(new { success = true });
                 }
                 return Json(new { success = false, error = "Model have required fields" });

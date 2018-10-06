@@ -20,6 +20,17 @@ namespace FC.Data.Repositories
             DbContext.Texts.Add(text);
             await DbContext.SaveChangesAsync();
         }
+        public async Task<List<QuestionModel>> GetQuestions(int textID)
+        {
+            var lst = await (from o in DbContext.TextQuestions
+                             where o.TextId == textID
+                             select new QuestionModel
+                             {
+                                 Id = o.Id,
+                                 Text = o.Question.Text
+                             }).ToListAsync();
+            return lst;
+        }
         public async Task AddFolder(FolderModel model)
         {
             Folder folder = new Folder();
@@ -45,7 +56,7 @@ namespace FC.Data.Repositories
                              {
                                  Id = t.Id,
                                  Title = t.TextContent,
-                                 FolderId=t.FolderId,
+                                 FolderId = t.FolderId,
                                  Questions = t.TextQuestions.Select(q => new QuestionModel
                                  {
                                      Id = q.QuestionId,

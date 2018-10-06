@@ -19,4 +19,10 @@ namespace FC.Models
         public bool Status { get; set; }
         public List<QuestionModel> Questions { get; set; }
     }
+    public class SaveQuestionModel
+    {
+        public int TextId { get; set; }
+        public string Folder { get; set; }
+        public List<QuestionModel> Questions { get; set; }
+    }
 }
